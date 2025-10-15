@@ -1,24 +1,20 @@
-import bodyParser from 'body-parser';
-import express from 'express';
-
+import express from "express";
+import bodyParser from "body-parser";
+import userRoute from "./routes/usersRoute.js"; // adjust path as needed
+import mongoose from "mongoose";
 
 const app = express();
 app.use(bodyParser.json());
-app.get("/",(req,res)=>{
-    console.log("hello from backend");
-    res.json({message:"hello from backend"});
+
+const  connectionString = "mongodb+srv://tester:123@cluster0.tr0sfxs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+
+mongoose.connect(connectionString).then(() => {
+  console.log("Connected to MongoDB");
+}).catch((err) => {
+  console.error("Error connecting to MongoDB", err);
 });
+app.use("/api/users", userRoute);
 
-app.post("/",(req,res)=>{
-    const name=req.body.name
-    const message = "hi"+name
-    
-    
-
-    console.log("data posted");
-    res.json({message:message});
-});
-
-app.listen(5000,(req,res)=>{
-    console.log("server is running on port 3000");
+app.listen(5000, () => {
+  console.log("🚀 Server running on port 5000");
 });
